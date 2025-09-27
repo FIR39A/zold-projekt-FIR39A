@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kihívás – Zöldebb Holnap</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<div class="bg-decor left">
+  <div class="tree t1" style="left:20px;">
+    <div class="trunk"></div><div class="crown"></div>
+  </div>
+  <div class="tree t2" style="left:90px;">
+    <div class="trunk"></div><div class="crown"></div>
+  </div>
+  <div class="tree t3" style="left:150px;">
+    <div class="trunk"></div><div class="crown"></div>
+  </div>
+</div>
+
+<div class="bg-decor right">
+  <div class="tree t2" style="right:20px;">
+    <div class="trunk"></div><div class="crown"></div>
+  </div>
+  <div class="tree t3" style="right:95px;">
+    <div class="trunk"></div><div class="crown"></div>
+  </div>
+  <div class="tree t1" style="right:160px;">
+    <div class="trunk"></div><div class="crown"></div>
+  </div>
+</div>
+<header>
+  <div class="nav">
+    <div class="logo">
+      <img src="images/hero.svg" alt="Logo">
+      <h1>Zöldebb Holnap <span class="badge">FIR39A</span></h1>
+    </div>
+    <nav>
+      <a href="index.html"><button class="btn">Otthon</button></a>
+      <a href="videos.html"><button class="btn">Klippek</button></a>
+      <a href="quiz.html"><button class="btn">Kihívás</button></a>
+    </nav>
+  </div>
+</header>
+
+<main class="container quiz-wrap">
+  <form class="quiz" id="quizForm">
+    <h2 class="center">Válaszolj a 10 kérdésre!</h2>
+
+    <div class="q">
+      <h4>1. Melyik beállítás fogyaszt kevesebbet télen?</h4>
+      <label><input type="radio" name="q1" value="a"> 23–24°C szobahőmérséklet</label><br>
+      <label><input type="radio" name="q1" value="b"> 19–20°C szobahőmérséklet pulóverrel</label>
+    </div>
+
+    <div class="q">
+      <h4>2. Mi kerülhet a komposztba?</h4>
+      <label><input type="radio" name="q2" value="a"> Narancshéj, kávézacc, száraz levelek</label><br>
+      <label><input type="radio" name="q2" value="b"> Üvegszilánk és műanyag zacskó</label>
+    </div>
+
+    <div class="q">
+      <h4>3. Melyik közlekedési mód a legzöldebb városon belül?</h4>
+      <label><input type="radio" name="q3" value="a"> Autó egyedül</label><br>
+      <label><input type="radio" name="q3" value="b"> Gyalog/bicikli/tömegközlekedés</label>
+    </div>
+
+    <div class="q">
+      <h4>4. Mikor a leghatékonyabb a mosógép használata?</h4>
+      <label><input type="radio" name="q4" value="a"> Ha mindig fél töltettel indítjuk</label><br>
+      <label><input type="radio" name="q4" value="b"> Ha tele dob mellett, alacsony hőfokon mosunk</label>
+    </div>
+
+    <div class="q">
+      <h4>5. Melyik a helyes párosítás?</h4>
+      <label><input type="radio" name="q5" value="a"> Kék kuka – üveg</label><br>
+      <label><input type="radio" name="q5" value="b"> Sárga kuka – műanyag/fém</label>
+    </div>
+
+    <div class="q">
+      <h4>6. Melyik vízhasználati szokás takarékosabb?</h4>
+      <label><input type="radio" name="q6" value="a"> Rövid zuhany</label><br>
+      <label><input type="radio" name="q6" value="b"> Hosszú, forró fürdő</label>
+    </div>
+
+    <div class="q">
+      <h4>7. Mivel csökkentheted az élelmiszerpazarlást?</h4>
+      <label><input type="radio" name="q7" value="a"> Heti tervezéssel és maradékok felhasználásával</label><br>
+      <label><input type="radio" name="q7" value="b"> Mindig túl sokat vásárolok, biztos ami biztos</label>
+    </div>
+
+    <div class="q">
+      <h4>8. Melyik eszköz fogyaszt a legkevesebbet?</h4>
+      <label><input type="radio" name="q8" value="a"> Hagyományos izzó</label><br>
+      <label><input type="radio" name="q8" value="b"> LED izzó</label>
+    </div>
+
+    <div class="q">
+      <h4>9. Melyik ital a legkörnyezettudatosabb, ha szomjas vagy útközben?</h4>
+      <label><input type="radio" name="q9" value="a"> Eldobható palackos víz</label><br>
+      <label><input type="radio" name="q9" value="b"> Kulacsba töltött csapvíz</label>
+    </div>
+
+    <div class="q">
+      <h4>10. Miért érdemes a standby üzemmódot is kikapcsolni?</h4>
+      <label><input type="radio" name="q10" value="a"> Mert így is fogyaszt egy kevés áramot</label><br>
+      <label><input type="radio" name="q10" value="b"> Mert a készülék tönkremegy tőle</label>
+    </div>
+
+    <div class="actions">
+      <button class="primary" type="submit">Értékelés</button>
+    </div>
+
+    <p class="center" id="result"></p>
+  </form>
+</main>
+<script src="index.js"></script>
+</body>
+</html>

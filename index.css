@@ -1,0 +1,96 @@
+*{box-sizing:border-box}
+:root{
+  --bg:#f8fbf8;
+  --card:#ffffff;
+  --accent1:#0f766e;
+  --accent2:#2dd4bf;
+  --text:#0b1732;
+  --muted:#5b6b7a;
+  --shadow:0 10px 30px rgba(2,6,23,.12);
+}
+html,body{margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg)}
+header{background:linear-gradient(90deg,var(--accent1),#6ee7b7);color:#fff;position:sticky;top:0;z-index:10;box-shadow:var(--shadow)}
+.nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 16px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo img{height:44px}
+.logo h1{font-size:20px;margin:0}
+.badge{font-size:12px;background:rgba(255,255,255,.2);padding:4px 8px;border-radius:8px}
+nav .btn{appearance:none;border:none;border-radius:20px;padding:8px 14px;background:#fff;color:var(--accent1);font-weight:700;margin-left:8px;cursor:pointer;box-shadow:var(--shadow);transition:transform .05s ease}
+nav .btn:active{transform:scale(0.98)}
+.container{max-width:1100px;margin:30px auto;padding:0 16px;position:relative;z-index:1}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.card{background:var(--card);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.card img{max-width:100%;border-radius:12px;display:block}
+h2{margin:6px 0 10px 0}
+p{color:var(--text);line-height:1.6}
+.small{color:var(--muted);font-size:14px}
+
+/* Kvíz */
+.quiz-wrap{display:flex;justify-content:center}
+.quiz{width:600px;max-width:100%;display:flex;flex-direction:column;gap:14px}
+.q{background:#fff;border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+.q h4{margin:6px 0 10px 0}
+.actions{display:flex;justify-content:center;margin-top:10px}
+.primary{background:var(--accent1);color:#fff;border:none;border-radius:16px;padding:10px 18px;cursor:pointer;box-shadow:var(--shadow)}
+.center{text-align:center}
+.badge-id{font-weight:700;background:#fff;color:var(--accent1);padding:2px 8px;border-radius:10px;margin-left:8px}
+
+@media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+
+/* Konfetti + szomorú modal (kvízhez) */
+.confetti{position:fixed;top:-10px;width:10px;height:14px;opacity:.9;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translate3d(var(--x,0),110vh,0) rotate(720deg);opacity:1}}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:50}
+.modal{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:24px;text-align:center;max-width:360px}
+.modal .face{font-size:64px;margin-bottom:8px}
+.close-btn{margin-top:10px}
+
+/* === Mozgó háttérfák (bal/jobb oldal) === */
+.bg-decor{
+  position:fixed;
+  bottom:-4px;
+  width:260px;
+  height:45vh;
+  pointer-events:none;   /* ne legyen kattintható */
+  z-index:0;             /* a tartalom alatt marad */
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,.15));
+}
+.bg-decor.left{left:-20px}
+.bg-decor.right{right:-20px}
+
+.tree{
+  position:absolute;
+  bottom:0;
+  width:84px; height:150px;
+  transform-origin:50% 100%;
+  animation: sway 6s ease-in-out infinite, bob 8s ease-in-out infinite alternate;
+  opacity:.95;
+}
+.tree .trunk{
+  position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+  width:14px; height:50px; border-radius:4px;
+  background:linear-gradient(#7b5a46,#654532);
+}
+.tree .crown{
+  position:absolute; bottom:38px; left:50%; transform:translateX(-50%);
+  width:110px; height:90px; border-radius:70px;
+  background:
+    radial-gradient(circle at 30% 35%, #2bd19b 0 34%, transparent 36%),
+    radial-gradient(circle at 65% 35%, #26c18e 0 34%, transparent 36%),
+    radial-gradient(circle at 50% 60%, #1e946c 0 40%, transparent 42%);
+  filter:saturate(0.95);
+}
+
+/* különböző méretek/ütemezések */
+.t1{ transform:translateY(0) scale(0.95); animation-duration: 7s, 9s; }
+.t2{ transform:translateY(0) scale(1.05); animation-duration: 6.5s, 8s; }
+.t3{ transform:translateY(0) scale(0.85); animation-duration: 7.5s, 10s; }
+
+@keyframes sway{
+  0%,100%{ transform: translateY(0) rotate(-2.2deg) }
+  50%    { transform: translateY(0) rotate( 2.2deg) }
+}
+@keyframes bob{
+  0%  { transform: translateY(-2px) }
+  100%{ transform: translateY(2px) }
+}
