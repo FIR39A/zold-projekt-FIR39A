@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="1200" height="360">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#b9f2ff"/>
+      <stop offset="100%" stop-color="#e9fff5"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#77e0a1"/>
+      <stop offset="100%" stop-color="#2fb67a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="360" fill="url(#sky)"/>
+  <g fill="#ffffff" opacity="0.92">
+    <g transform="translate(140,70)">
+      <ellipse cx="0" cy="0" rx="60" ry="32"/>
+      <ellipse cx="50" cy="-10" rx="50" ry="28"/>
+      <ellipse cx="100" cy="0" rx="60" ry="34"/>
+    </g>
+    <g transform="translate(540,50)">
+      <ellipse cx="0" cy="0" rx="60" ry="30"/>
+      <ellipse cx="50" cy="-14" rx="50" ry="26"/>
+      <ellipse cx="100" cy="0" rx="60" ry="30"/>
+    </g>
+    <g transform="translate(950,85)">
+      <ellipse cx="0" cy="0" rx="50" ry="26"/>
+      <ellipse cx="40" cy="-10" rx="40" ry="22"/>
+      <ellipse cx="80" cy="0" rx="50" ry="26"/>
+    </g>
+  </g>
+  <path d="M0,260 C200,180 340,220 480,240 C700,275 880,180 1200,260 L1200,360 L0,360 Z" fill="url(#hill)"/>
+  <g>
+    <g transform="translate(180,240)">
+      <rect x="-8" y="0" width="16" height="40" fill="#6b4e3d"/>
+      <circle cx="0" cy="-10" r="26" fill="#1c7c54"/>
+      <circle cx="-16" cy="0" r="22" fill="#1f8a5b"/>
+      <circle cx="16" cy="0" r="22" fill="#1f8a5b"/>
+    </g>
+    <g transform="translate(340,220) scale(1.2)">
+      <rect x="-8" y="0" width="16" height="40" fill="#6b4e3d"/>
+      <circle cx="0" cy="-10" r="26" fill="#1c7c54"/>
+      <circle cx="-16" cy="0" r="22" fill="#1f8a5b"/>
+      <circle cx="16" cy="0" r="22" fill="#1f8a5b"/>
+    </g>
+    <g transform="translate(640,235) scale(0.95)">
+      <rect x="-8" y="0" width="16" height="40" fill="#6b4e3d"/>
+      <circle cx="0" cy="-10" r="26" fill="#1c7c54"/>
+      <circle cx="-16" cy="0" r="22" fill="#1f8a5b"/>
+      <circle cx="16" cy="0" r="22" fill="#1f8a5b"/>
+    </g>
+    <g transform="translate(840,230) scale(1.1)">
+      <rect x="-8" y="0" width="16" height="40" fill="#6b4e3d"/>
+      <circle cx="0" cy="-10" r="26" fill="#1c7c54"/>
+      <circle cx="-16" cy="0" r="22" fill="#1f8a5b"/>
+      <circle cx="16" cy="0" r="22" fill="#1f8a5b"/>
+    </g>
+    <g transform="translate(1040,240) scale(0.9)">
+      <rect x="-8" y="0" width="16" height="40" fill="#6b4e3d"/>
+      <circle cx="0" cy="-10" r="26" fill="#1c7c54"/>
+      <circle cx="-16" cy="0" r="22" fill="#1f8a5b"/>
+      <circle cx="16" cy="0" r="22" fill="#1f8a5b"/>
+    </g>
+  </g>
+</svg>
