@@ -6,62 +6,81 @@
   <title>Klippek – Zöldebb Holnap</title>
   <link rel="stylesheet" href="index.css">
 </head>
-<body>
+<body class="videos">
+  <!-- BAL OLDALI IKONOS MENÜ (head-ből ide hozva a helyes HTML-ért) -->
+  <aside class="side-nav">
+    <a href="index.html"  class="nav-btn" title="Otthon">🏠<span>Otthon</span></a>
+    <a href="videos.html" class="nav-btn" title="Klippek">🎬<span>Klippek</span></a>
+    <a href="quiz.html"   class="nav-btn" title="Kihívás">❓<span>Kihívás</span></a>
+  </aside>
 
-<!-- Háttér dekor (mozgó fák/bokrok) -->
-<div class="bg-decor left">
-  <div class="tree t1" style="left:20px;">
-    <div class="trunk"></div><div class="crown"></div>
+  <div class="mountain-band">
+    <svg viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="bandG" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" style="stop-color:var(--mntLight)"/>
+          <stop offset="100%" style="stop-color:var(--mntDark)"/>
+        </linearGradient>
+      </defs>
+      <path d="M0 220 C 150 180, 300 250, 480 230 S 820 210, 1000 240 S 1200 230, 1200 230 L 1200 320 L 0 320 Z" fill="url(#bandG)" opacity=".95"/>
+    </svg>
   </div>
-  <div class="tree t2" style="left:90px;">
-    <div class="trunk"></div><div class="crown"></div>
+  <div class="mountains left">
+    <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="mntG1" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" style="stop-color:var(--mntLight)"/>
+          <stop offset="100%" style="stop-color:var(--mntDark)"/>
+        </linearGradient>
+      </defs>
+      <path d="M-20 220 L80 80 L180 210 L260 130 L340 230 L340 320 L-20 320 Z" fill="url(#mntG1)" opacity=".8"/>
+      <path d="M-20 260 C60 220, 140 260, 240 240 S340 270, 340 320 L-20 320 Z" fill="var(--mntDark)" opacity=".92"/>
+    </svg>
   </div>
-  <div class="tree t3" style="left:150px;">
-    <div class="trunk"></div><div class="crown"></div>
+  <div class="mountains right">
+    <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="mntG1" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" style="stop-color:var(--mntLight)"/>
+          <stop offset="100%" style="stop-color:var(--mntDark)"/>
+        </linearGradient>
+      </defs>
+      <path d="M-20 220 L80 80 L180 210 L260 130 L340 230 L340 320 L-20 320 Z" fill="url(#mntG1)" opacity=".8"/>
+      <path d="M-20 260 C60 220, 140 260, 240 240 S340 270, 340 320 L-20 320 Z" fill="var(--mntDark)" opacity=".92"/>
+    </svg>
   </div>
-</div>
 
-<div class="bg-decor right">
-  <div class="tree t2" style="right:20px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
-  <div class="tree t3" style="right:95px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
-  <div class="tree t1" style="right:160px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
-</div>
-<!-- /Háttér dekor -->
-
-<header>
-  <div class="nav">
-    <div class="logo">
-      <img src="images/hero.svg" alt="Logo">
-      <h1>Zöldebb Holnap <span class="badge">FIR39A</span></h1>
+  <div class="clouds"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div></div>
+  <header>
+    <div class="nav">
+      <div class="logo"><img src="images/hero.svg" alt="Logo"><h1>Zöldebb Holnap <span class="badge">FIR39A</span></h1></div>
+      <nav><a href="index.html"><button class="btn">Otthon</button></a><a href="videos.html"><button class="btn">Klippek</button></a><a href="quiz.html"><button class="btn">Kihívás</button></a></nav>
     </div>
-    <nav>
-      <a href="index.html"><button class="btn">Otthon</button></a>
-      <a href="videos.html"><button class="btn">Klippek</button></a>
-      <a href="quiz.html"><button class="btn">Kihívás</button></a>
-    </nav>
-  </div>
-</header>
+  </header>
 
-<main class="container">
-  <h2 class="center">Oktató Videó</h2>
-  <div class="grid">
-    <div class="card">
-      <iframe width="100%" height="320" src="https://www.youtube.com/embed/_6xlNyWPpB8" 
-        title="Műanyagok hatása" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="card">
-      <iframe width="100%" height="320" src="https://www.youtube.com/embed/zCRKvDyyHmI" 
-        title="A nulla hulladék" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </div>
-</main>
+  <main class="container">
+    <h2 class="section-title">Oktató klippek</h2>
 
-<script src="index.js"></script>
+    <!-- RÖVID, MEGFOGÓ BEVEZETŐ -->
+    <div class="card" style="margin-bottom:16px">
+      <p><strong>Miért érdemes belekattintani?</strong> Mert 1–2 perc alatt kapsz olyan ötleteket, 
+      amelyek azonnal csökkentik a rezsidet és a hulladékod mennyiségét –
+      a legtöbb tipphez csak egy apró szokásváltás kell. Nézd meg, válassz ki egyet, és még ma próbáld ki! 🚀</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <iframe width="100%" height="320" src="https://www.youtube.com/embed/_6xlNyWPpB8" title="Műanyagok hatása" frameborder="0" allowfullscreen></iframe>
+        <p><strong>Miről szól?</strong> A műanyagok életciklusa és környezeti terhei.
+        Ez a videó bemutatja, hogyan keletkezik a műanyag hulladék, és milyen hatással van a környezetünkre. Rávilágít arra is, hogy mit tehetünk a műanyagszennyezés csökkentése érdekében.</p>
+      </div>
+      <div class="card">
+        <iframe width="100%" height="320" src="https://www.youtube.com/embed/zCRKvDyyHmI" title="A nulla hulladék" frameborder="0" allowfullscreen></iframe>
+        <p><strong>Mit tanulsz belőle?</strong> Az újrahasznosítás és körforgásos gazdaság fontossága.
+        Ez a videó elmagyarázza, hogyan működik a körforgásos gazdaság, és miért kulcsfontosságú a fenntartható jövő érdekében. Konkrét tippeket ad a mindennapi élethez is.</p>
+      </div>
+    </div>
+  </main>
+  <script src="index.js"></script>
 </body>
 </html>
