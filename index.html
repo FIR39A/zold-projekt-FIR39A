@@ -1,39 +1,73 @@
+
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+<!-- BAL OLDALI IKONOS MENÜ -->
+<aside class="side-nav">
+
+  <a href="index.html"  class="nav-btn" title="Otthon">🏠<span>Otthon</span></a>
+  <a href="videos.html" class="nav-btn" title="Klippek">🎬<span>Klippek</span></a>
+  <a href="quiz.html"   class="nav-btn" title="Kihívás">❓<span>Kihívás</span></a>
+</aside>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="generator-id" content="FIR39A">
   <title>Otthon – Zöldebb Holnap</title>
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
+<div class="mountain-band">
+<svg viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="bandG" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" style="stop-color:var(--mntLight)"/>
+      <stop offset="100%" style="stop-color:var(--mntDark)"/>
+    </linearGradient>
+  </defs>
+  <path d="M0 220 C 150 180, 300 250, 480 230 S 820 210, 1000 240 S 1200 230, 1200 230 L 1200 320 L 0 320 Z" fill="url(#bandG)" opacity=".95"/>
+</svg>
+</div>
+<div class="mountains left">
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="mntG1" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" style="stop-color:var(--mntLight)"/>
+      <stop offset="100%" style="stop-color:var(--mntDark)"/>
+    </linearGradient>
+  </defs>
+  <path d="M-20 220 L80 80 L180 210 L260 130 L340 230 L340 320 L-20 320 Z" fill="url(#mntG1)" opacity=".8"/>
+  <path d="M-20 260 C60 220, 140 260, 240 240 S340 270, 340 320 L-20 320 Z" fill="var(--mntDark)" opacity=".92"/>
+</svg>
+</div>
+<div class="mountains right">
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="mntG1" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" style="stop-color:var(--mntLight)"/>
+      <stop offset="100%" style="stop-color:var(--mntDark)"/>
+    </linearGradient>
+  </defs>
+  <path d="M-20 220 L80 80 L180 210 L260 130 L340 230 L340 320 L-20 320 Z" fill="url(#mntG1)" opacity=".8"/>
+  <path d="M-20 260 C60 220, 140 260, 240 240 S340 270, 340 320 L-20 320 Z" fill="var(--mntDark)" opacity=".92"/>
+</svg>
+</div>
 
-<!-- Háttér dekor (mozgó fák) -->
+
+
+
+
+<div class="clouds">
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+</div>
 <div class="bg-decor left">
-  <div class="tree t1" style="left:20px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
-  <div class="tree t2" style="left:90px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
-  <div class="tree t3" style="left:150px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
+  <div class="tree" style="left:15px;"><div class="trunk"></div><div class="crown"></div></div>
+  <div class="tree" style="left:85px;"><div class="trunk"></div><div class="crown"></div></div>
+  <div class="tree" style="left:155px;"><div class="trunk"></div><div class="crown"></div></div>
 </div>
-
 <div class="bg-decor right">
-  <div class="tree t2" style="right:20px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
-  <div class="tree t3" style="right:95px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
-  <div class="tree t1" style="right:160px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
+  <div class="tree" style="right:15px;"><div class="trunk"></div><div class="crown"></div></div>
+  <div class="tree" style="right:85px;"><div class="trunk"></div><div class="crown"></div></div>
+  <div class="tree" style="right:155px;"><div class="trunk"></div><div class="crown"></div></div>
 </div>
-<!-- /Háttér dekor -->
 
 <header>
   <div class="nav">
@@ -50,31 +84,53 @@
 </header>
 
 <main class="container">
-  <div class="card">
-    <img src="images/landscape.svg" alt="Rajzolt táj felhőkkel és fákkal">
+  <div class="card hero" style="position:relative">
+    <div id="seasonBadge">Évszak: –</div>
+    <svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" style="stop-color:var(--skyTop)"/><stop offset="100%" style="stop-color:var(--skyBottom)"/></linearGradient>
+        <linearGradient id="hill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" style="stop-color:var(--hillTop)"/><stop offset="100%" style="stop-color:var(--hillBottom)"/></linearGradient>
+      </defs>
+      <rect width="1200" height="360" fill="url(#sky)"/>
+      <g fill="#ffffff" opacity="0.92">
+        <g transform="translate(260,90)"><ellipse cx="0" cy="0" rx="60" ry="32"/><ellipse cx="50" cy="-10" rx="50" ry="28"/><ellipse cx="100" cy="0" rx="60" ry="34"/></g>
+        <g transform="translate(760,80)"><ellipse cx="0" cy="0" rx="60" ry="30"/><ellipse cx="50" cy="-14" rx="50" ry="26"/><ellipse cx="100" cy="0" rx="60" ry="30"/></g>
+      </g>
+      <path d="M0,260 C200,180 340,220 480,240 C700,275 880,180 1200,260 L1200,360 L0,360 Z" fill="url(#hill)"/>
+    </svg>
   </div>
+
+  <h2 class="section-title">Mi a célunk?</h2>
+  
   <div class="grid">
     <div class="card">
-      <h2>Mi a célunk?</h2>
       <p>Egyszerű, hétköznapi tippekkel segítünk csökkenteni az ökológiai lábnyomodat. Energiatakarékosság,
-      okos közlekedés, szelektív hulladék – mindez érthetően és röviden.</p>
-      <audio id="natureAudio" src="music/nature.wav" controls></audio>
+      okos közlekedés, szelektív hulladék és víztakarékosság – mindez érthetően, röviden.</p>
+      <p class="small">Nyomd meg a lejátszót egy kis természet hangért.</p>
+      <audio src="music/nature.wav" controls preload="auto"></audio>
     </div>
     <div class="card">
-      <img src="images/energy.svg" alt="Energiatakarékosság tippek">
-    </div>
+      <ul>
+  <li>20°C fűtés + pulóver</li>
+  <li>LED izzók</li>
+  <li>Kulacs, nem eldobható palack</li>
+  <li>Standby kikapcsolása, kapcsolós hosszabbító</li>
+  <li>Rövid zuhany + víztakarékos zuhanyfej</li>
+  <li>Textilszatyor + saját doboz bevásárláshoz</li>
+</ul>
 
-    <div class="card">
-      <img src="images/waste.svg" alt="Szelektív hulladék">
-    </div>
-    <div class="card">
-      <h2>Milyen témákkal találkozol?</h2>
-      <p>Energiatakarékosság az otthonodban, fenntartható élelmiszervásárlás, szelektív hulladék és komposzt,
-      víztakarékosság, valamint a hétköznapi közlekedési döntések hatása.</p>
-      <p class="small">Nézd meg a klippeket, majd tedd próbára magad a Kihívás fülön!</p>
     </div>
   </div>
+
+  <h2 class="section-title">Miért számít?</h2>
+  <div class="info-grid">
+    <div class="info energy"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M2 11a10 10 0 1 1 20 0c0 4-3 5-4 7H6c-1-2-4-3-4-7z"/></svg><div class="txt">A LED izzók ~80%-kal kevesebb áramot fogyasztanak.</div></div>
+    <div class="info water"><svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11z"/></svg><div class="txt">Rövid zuhannyal több tíz liter vizet spórolsz.</div></div>
+    <div class="info trees"><svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-6"/><path d="M6 12a6 6 0 1 1 12 0c0 6-12 6-12 0z"/></svg><div class="txt">Egy tonna újrapapír kb. 17 fát ment meg.</div></div>
+    <div class="info waste"><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l3-5 4 2M21 13l-3 5-4-2M7 21h10"/></svg><div class="txt">Kulacs + szelektálás = kevesebb műanyag hulladék.</div></div>
+  </div>
 </main>
+
 <script src="index.js"></script>
 </body>
 </html>
