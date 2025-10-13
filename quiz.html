@@ -1,121 +1,559 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kihívás – Zöldebb Holnap</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="index.css" />
+  <style>
+    /* ——— Oldalspecifikus stílusok ——— */
+    .quiz-wrap{max-width:1100px;margin:18px auto;padding:0 16px}
+    .quiz{background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(2,6,23,.12);padding:18px}
+    .q{padding:14px;border:1px solid #eef1f6;border-radius:12px;margin:14px 0}
+    .actions{display:flex;gap:10px;justify-content:center;margin:18px 0;flex-wrap:wrap}
+    .primary,.ghost{appearance:none;border:none;border-radius:12px;padding:10px 18px;font-weight:800;cursor:pointer}
+    .primary{background:#16a34a;color:#fff;box-shadow:0 10px 20px rgba(22,163,74,.25)}
+    .ghost{background:#eef2ff;color:#0b1732}
+    #result{font-weight:800;text-align:center}
+
+    /* Game */
+    .game{margin-top:28px}
+    .items{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .item{user-select:none;background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:10px 14px;box-shadow:0 8px 16px rgba(2,6,23,.06);cursor:grab;font-weight:700}
+    .item.dragging{opacity:.6}
+    .binsRow{display:flex;gap:16px;justify-content:space-between;margin-top:14px}
+    .dropbin{flex:1;min-height:120px;border-radius:16px;background:#eff6ff;border:2px dashed #93c5fd;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 10px 20px rgba(0,0,0,.06)}
+    .dropbin.correct{background:#ecfdf5;border-color:#34d399}
+    .dropbin.wrong{animation:sh 0.25s ease}
+    @keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+    .dropbin .label{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-weight:800;color:#0b1732}
+
+    .side-bins .bin{width:84px;height:120px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;box-shadow:0 10px 20px rgba(0,0,0,.2)}
+    .bin.paper{background:#1e3a8a}.bin.glass{background:#166534}.bin.metal{background:#374151}.bin.plastic{background:#ca8a04}
+    .side-bins{position:fixed;top:130px;bottom:24px;width:100px;display:flex;flex-direction:column;gap:18px;pointer-events:none;z-index:0}
+    .side-bins.left{left:12px}.side-bins.right{right:12px}
+
+    /* Overlay feedback */
+    .overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(2,6,23,.5);z-index:9999}
+    .overlay.show{display:grid}
+    .modal{background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(2,6,23,.35);padding:24px;max-width:420px;text-align:center}
+    .icon{font-size:64px;line-height:1}
+    .ok{color:#16a34a}.sad{color:#b91c1c}.wow{color:#eab308}
+    .modal h3{margin:10px 0 4px 0}
+    .modal p{margin:0 0 10px 0}
+    .modal .btns{display:flex;gap:10px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+    .btn{appearance:none;border:none;border-radius:12px;padding:10px 16px;font-weight:800;cursor:pointer}
+    .btn.primary{background:#16a34a;color:#fff}
+    .btn.ghost{background:#eef2ff;color:#0b1732}
+
+    /* Confetti */
+    .particle{position:fixed;width:8px;height:8px;background:#16a34a;border-radius:2px;animation:fly 1s ease-out forwards}
+    @keyframes fly{ 0%{transform:translate(0,0);opacity:1} 100%{transform:translate(var(--tx,0), -260px) rotate(340deg);opacity:0} }
+
+    /* Mobilbarát tördelés */
+    @media (max-width: 640px){
+      .binsRow{flex-wrap:wrap;gap:10px}
+      .dropbin{min-height:90px;flex:1 1 calc(50% - 10px)}
+      .actions .primary,.actions .ghost{width:100%}
+      .q label{display:block;padding:8px 6px}
+      .q input{transform:scale(1.2);margin-right:8px}
+    }
+  </style>
 </head>
 <body>
+  <!-- BAL OLDALI IKONOS MENÜ -->
+  <aside class="side-nav">
+    <a href="index.html"  class="nav-btn" title="Otthon">🏠<span>Otthon</span></a>
+    <a href="videos.html" class="nav-btn" title="Klippek">🎬<span>Klippek</span></a>
+    <a href="quiz.html"   class="nav-btn" title="Kihívás">❓<span>Kihívás</span></a>
+  </aside>
 
-<div class="bg-decor left">
-  <div class="tree t1" style="left:20px;">
-    <div class="trunk"></div><div class="crown"></div>
+  <div class="mountain-band">
+    <svg viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="bandG" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" style="stop-color:var(--mntLight)"/>
+          <stop offset="100%" style="stop-color:var(--mntDark)"/>
+        </linearGradient>
+      </defs>
+      <path d="M0 220 C 150 180, 300 250, 480 230 S 820 210, 1000 240 S 1200 230, 1200 230 L 1200 320 L 0 320 Z" fill="url(#bandG)" opacity=".95"/>
+    </svg>
   </div>
-  <div class="tree t2" style="left:90px;">
-    <div class="trunk"></div><div class="crown"></div>
+  <div class="mountains left">
+    <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="mntG1" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" style="stop-color:var(--mntLight)"/>
+          <stop offset="100%" style="stop-color:var(--mntDark)"/>
+        </linearGradient>
+      </defs>
+      <path d="M-20 220 L80 80 L180 210 L260 130 L340 230 L340 320 L-20 320 Z" fill="url(#mntG1)" opacity=".8"/>
+      <path d="M-20 260 C60 220, 140 260, 240 240 S340 270, 340 320 L-20 320 Z" fill="var(--mntDark)" opacity=".92"/>
+    </svg>
   </div>
-  <div class="tree t3" style="left:150px;">
-    <div class="trunk"></div><div class="crown"></div>
+  <div class="mountains right">
+    <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="mntG1" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" style="stop-color:var(--mntLight)"/>
+          <stop offset="100%" style="stop-color:var(--mntDark)"/>
+        </linearGradient>
+      </defs>
+      <path d="M-20 220 L80 80 L180 210 L260 130 L340 230 L340 320 L-20 320 Z" fill="url(#mntG1)" opacity=".8"/>
+      <path d="M-20 260 C60 220, 140 260, 240 240 S340 270, 340 320 L-20 320 Z" fill="var(--mntDark)" opacity=".92"/>
+    </svg>
   </div>
-</div>
 
-<div class="bg-decor right">
-  <div class="tree t2" style="right:20px;">
-    <div class="trunk"></div><div class="crown"></div>
+  <header>
+    <div class="nav">
+      <div class="logo"><img src="images/hero.svg" alt="Logo"><h1>Zöldebb Holnap <span class="badge">FIR39A</span></h1></div>
+      <nav><a href="index.html"><button class="btn">Otthon</button></a><a href="videos.html"><button class="btn">Klippek</button></a><a href="quiz.html"><button class="btn">Kihívás</button></a></nav>
+    </div>
+  </header>
+
+  <div class="side-bins right">
+    <div class="bin plastic">Műanyag</div>
+    <div class="bin paper">Papír</div>
+    <div class="bin glass">Üveg</div>
   </div>
-  <div class="tree t3" style="right:95px;">
-    <div class="trunk"></div><div class="crown"></div>
+
+  <main class="quiz-wrap">
+    <form class="quiz" id="quizForm">
+      <h2 class="center">Kihívás – 15 kérdés vegyesen</h2>
+
+      <div class="q">
+        <h4>1) Melyik izzó a legtakarékosabb?</h4>
+        <label><input type="radio" name="q1" value="a"> Hagyományos izzó</label><br>
+        <label><input type="radio" name="q1" value="b"> Halogén izzó</label><br>
+        <label><input type="radio" name="q1" value="c"> LED izzó</label>
+      </div>
+
+      <div class="q">
+        <h4>2) Melyik szokások spórolnak vizet? (Több is helyes)</h4>
+        <label><input type="checkbox" name="q2" value="a"> Rövid zuhany</label><br>
+        <label><input type="checkbox" name="q2" value="b"> Fogmosás közben csap elzárása</label><br>
+        <label><input type="checkbox" name="q2" value="c"> Csap csepegésének javítása</label>
+      </div>
+
+      <div class="q">
+        <h4>3) Melyik ital a legzöldebb útközben?</h4>
+        <label><input type="radio" name="q3" value="a"> Eldobható palackos víz</label><br>
+        <label><input type="radio" name="q3" value="b"> Kulacsba töltött csapvíz</label>
+      </div>
+
+      <div class="q">
+        <h4>4) Írj egy eszközt, amivel kiválthatod az eldobható palackot!</h4>
+        <input type="text" name="q4" placeholder="pl. kulacs">
+      </div>
+
+      <div class="q">
+        <h4>5) Mikor hatékony a mosógép használata?</h4>
+        <label><input type="radio" name="q5" value="a"> Fél töltet, magas hőfok</label><br>
+        <label><input type="radio" name="q5" value="b"> Tele dob, alacsony hőfok</label><br>
+        <label><input type="radio" name="q5" value="c"> Csak gyorsprogramok</label><br>
+        <label><input type="radio" name="q5" value="d"> Mindig 90°C</label>
+      </div>
+
+      <div class="q"><h4>6) Melyik beállítás takarékosabb télen?</h4>
+        <label><input type="radio" name="q6" value="a"> 23–24°C</label><br>
+        <label><input type="radio" name="q6" value="b"> 19–20°C pulóverrel</label></div>
+
+      <div class="q"><h4>7) Mivel csökkentheted az élelmiszerpazarlást?</h4>
+        <label><input type="radio" name="q7" value="a"> Heti tervezéssel és maradék felhasználásával</label><br>
+        <label><input type="radio" name="q7" value="b"> Mindig sokat veszek, biztos ami biztos</label></div>
+
+      <div class="q"><h4>8) Melyik fogyaszt kevesebbet?</h4>
+        <label><input type="radio" name="q8" value="a"> Hagyományos izzó</label><br>
+        <label><input type="radio" name="q8" value="b"> LED izzó</label></div>
+
+      <!-- 9) Párosítós: kuka színek -->
+      <div class="q">
+        <h4>9) Párosítsd a kuka színét a hulladékhoz!</h4>
+        <div class="match-wrap" id="match1">
+          <div class="match-cols">
+            <div class="match-list left">
+              <div class="match-item" draggable="true" data-key="paper">Papír</div>
+              <div class="match-item" draggable="true" data-key="plastic">Műanyag/Fém</div>
+              <div class="match-item" draggable="true" data-key="glass">Üveg</div>
+            </div>
+            <div class="match-list right">
+              <div class="match-target" data-accept="paper">Kék kuka — paper</div>
+              <div class="match-target" data-accept="plastic">Sárga kuka — plastic</div>
+              <div class="match-target" data-accept="glass">Zöld kuka — glass</div>
+            </div>
+          </div>
+          <div class="match-hint">Fogd meg a bal listából és húzd a megfelelő célra.</div>
+        </div>
+      </div>
+
+      <!-- 10) Párosítós: energiatippek hatása -->
+      <div class="q">
+        <h4>10) Párosítsd az energiatakarékos tippet a hatásával!</h4>
+        <div class="match-wrap" id="match2">
+          <div class="match-cols">
+            <div class="match-list left">
+              <div class="match-item" draggable="true" data-key="temp">1°C-kal lejjebb a fűtés</div>
+              <div class="match-item" draggable="true" data-key="led">LED-re csere</div>
+              <div class="match-item" draggable="true" data-key="standby">Standby kikapcsolása</div>
+            </div>
+            <div class="match-list right">
+              <div class="match-target" data-accept="standby">Kevesebb „láthatatlan” áramfogyasztás</div>
+              <div class="match-target" data-accept="temp">Kb. 6% energia-megtakarítás</div>
+              <div class="match-target" data-accept="led">Nagyon alacsony fogyasztás + hosszú élettartam</div>
+            </div>
+          </div>
+          <div class="match-hint">Húzd a párokat egymáshoz.</div>
+        </div>
+      </div>
+
+      <div class="q"><h4>11) Melyik kuka a műanyagé?</h4>
+        <label><input type="radio" name="q9" value="a"> Sárga</label><br>
+        <label><input type="radio" name="q9" value="b"> Kék</label></div>
+
+      <div class="q"><h4>12) Melyik a fenntarthatóbb közlekedés?</h4>
+        <label><input type="radio" name="q10" value="a"> Egyedül autóval</label><br>
+        <label><input type="radio" name="q10" value="b"> Tömegközlekedés/kerékpár</label></div>
+
+      <div class="q"><h4>13) Mi kerülhet a komposztba?</h4>
+        <label><input type="radio" name="q11" value="a"> Narancshéj, kávézacc</label><br>
+        <label><input type="radio" name="q11" value="b"> Üveg</label></div>
+
+      <div class="q"><h4>14) Melyik hasznos a villanyszámlának?</h4>
+        <label><input type="checkbox" name="q12" value="a"> LED-re csere</label><br>
+        <label><input type="checkbox" name="q12" value="b"> Felesleges stand-by kikapcsolása</label></div>
+
+      <div class="q"><h4>15) Párosítsd: „Papír – ?”</h4>
+        <label><input type="radio" name="q13" value="a"> Kék kuka</label><br>
+        <label><input type="radio" name="q13" value="b"> Sárga kuka</label></div>
+
+      <div class="actions">
+        <button class="primary" type="submit">Értékelés</button>
+        <button class="ghost" type="button" id="resetBtn">Újra kitöltöm</button>
+      </div>
+      <p id="result"></p>
+    </form>
+
+    <!-- Drag & drop játék -->
+    <div class="game card">
+      <h3>Dobd a megfelelő kukába!</h3>
+      <p class="small">Húzd az elemeket a helyes szelektív kukába. A „kakukktojás” egyik szelektív kukába sem való.</p>
+      <div class="items" id="items">
+        <div class="item" draggable="true" data-type="papir">Karton doboz</div>
+        <div class="item" draggable="true" data-type="uveg">Üvegpalack</div>
+        <div class="item" draggable="true" data-type="fem">Alumínium doboz</div>
+        <div class="item" draggable="true" data-type="muanyag">PET palack</div>
+        <div class="item" draggable="true" data-type="kakukk">Banánhéj (kakukktojás)</div>
+      </div>
+      <div class="binsRow">
+        <div class="dropbin" data-accept="papir"><div class="label">Papír</div></div>
+        <div class="dropbin" data-accept="uveg"><div class="label">Üveg</div></div>
+        <div class="dropbin" data-accept="fem"><div class="label">Fém</div></div>
+        <div class="dropbin" data-accept="muanyag"><div class="label">Műanyag</div></div>
+      </div>
+      <p id="gameMsg" class="small"></p>
+    </div>
+  </main>
+
+  <!-- Feedback overlay -->
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+      <div id="fbIcon" class="icon">🙂</div>
+      <h3 id="fbTitle">Visszajelzés</h3>
+      <p id="fbText">Szöveges üzenet</p>
+      <div class="btns">
+        <button class="btn primary" id="fbOk">OK</button>
+        <button class="btn ghost" id="fbRetry">Újra kitöltöm</button>
+      </div>
+    </div>
   </div>
-  <div class="tree t1" style="right:160px;">
-    <div class="trunk"></div><div class="crown"></div>
-  </div>
-</div>
-<header>
-  <div class="nav">
-    <div class="logo">
-      <img src="images/hero.svg" alt="Logo">
-      <h1>Zöldebb Holnap <span class="badge">FIR39A</span></h1>
-    </div>
-    <nav>
-      <a href="index.html"><button class="btn">Otthon</button></a>
-      <a href="videos.html"><button class="btn">Klippek</button></a>
-      <a href="quiz.html"><button class="btn">Kihívás</button></a>
-    </nav>
-  </div>
-</header>
 
-<main class="container quiz-wrap">
-  <form class="quiz" id="quizForm">
-    <h2 class="center">Válaszolj a 10 kérdésre!</h2>
+  <!-- ——— Logika ——— -->
+  <script>
+  // --- Értékelés + overlay/hang/konfetti ---
+  (function(){
+    const form = document.getElementById('quizForm');
+    const resultEl = document.getElementById('result');
+    const overlay = document.getElementById('overlay');
+    const fbIcon = document.getElementById('fbIcon');
+    const fbTitle = document.getElementById('fbTitle');
+    const fbText = document.getElementById('fbText');
+    const fbOk = document.getElementById('fbOk');
+    const fbRetry = document.getElementById('fbRetry');
+    const resetBtn = document.getElementById('resetBtn');
 
-    <div class="q">
-      <h4>1. Melyik beállítás fogyaszt kevesebbet télen?</h4>
-      <label><input type="radio" name="q1" value="a"> 23–24°C szobahőmérséklet</label><br>
-      <label><input type="radio" name="q1" value="b"> 19–20°C szobahőmérséklet pulóverrel</label>
-    </div>
+    const successS = new Audio('music/success.wav');
+    const failS    = new Audio('music/fail.wav');
+    successS.volume = .6; failS.volume = .6;
 
-    <div class="q">
-      <h4>2. Mi kerülhet a komposztba?</h4>
-      <label><input type="radio" name="q2" value="a"> Narancshéj, kávézacc, száraz levelek</label><br>
-      <label><input type="radio" name="q2" value="b"> Üvegszilánk és műanyag zacskó</label>
-    </div>
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      let score=0;
+      const ok = {
+        q1:'c', q3:'b', q4:'kulacs', q5:'b', q6:'b', q7:'a', q8:'b',
+        q9:'a', q10:'b', q11:'a', q12:['a','b'], q13:'a'
+      };
 
-    <div class="q">
-      <h4>3. Melyik közlekedési mód a legzöldebb városon belül?</h4>
-      <label><input type="radio" name="q3" value="a"> Autó egyedül</label><br>
-      <label><input type="radio" name="q3" value="b"> Gyalog/bicikli/tömegközlekedés</label>
-    </div>
+      // szabad szöveg
+      if(new RegExp(ok.q4,'i').test(this.q4.value||'')) score++;
 
-    <div class="q">
-      <h4>4. Mikor a leghatékonyabb a mosógép használata?</h4>
-      <label><input type="radio" name="q4" value="a"> Ha mindig fél töltettel indítjuk</label><br>
-      <label><input type="radio" name="q4" value="b"> Ha tele dob mellett, alacsony hőfokon mosunk</label>
-    </div>
+      // single choice
+      ['q1','q3','q5','q6','q7','q8','q9','q10','q11','q13'].forEach(k=>{
+        const v = (this[k]?.value)||'';
+        if(v===ok[k]) score++;
+      });
 
-    <div class="q">
-      <h4>5. Melyik a helyes párosítás?</h4>
-      <label><input type="radio" name="q5" value="a"> Kék kuka – üveg</label><br>
-      <label><input type="radio" name="q5" value="b"> Sárga kuka – műanyag/fém</label>
-    </div>
+      // checkbox
+      const vals12=[...this.querySelectorAll('input[name="q12"]:checked')].map(i=>i.value);
+      if(ok.q12.every(v=>vals12.includes(v)) && vals12.length===ok.q12.length) score++;
 
-    <div class="q">
-      <h4>6. Melyik vízhasználati szokás takarékosabb?</h4>
-      <label><input type="radio" name="q6" value="a"> Rövid zuhany</label><br>
-      <label><input type="radio" name="q6" value="b"> Hosszú, forró fürdő</label>
-    </div>
+      // multi (q2)
+      const vals2=[...this.querySelectorAll('input[name="q2"]:checked')].map(i=>i.value);
+      if(['a','b','c'].every(v=>vals2.includes(v)) && vals2.length===3) score++;
 
-    <div class="q">
-      <h4>7. Mivel csökkentheted az élelmiszerpazarlást?</h4>
-      <label><input type="radio" name="q7" value="a"> Heti tervezéssel és maradékok felhasználásával</label><br>
-      <label><input type="radio" name="q7" value="b"> Mindig túl sokat vásárolok, biztos ami biztos</label>
-    </div>
+      // párosítós kész állapot
+      if(window.match1Done) score++;
+      if(window.match2Done) score++;
 
-    <div class="q">
-      <h4>8. Melyik eszköz fogyaszt a legkevesebbet?</h4>
-      <label><input type="radio" name="q8" value="a"> Hagyományos izzó</label><br>
-      <label><input type="radio" name="q8" value="b"> LED izzó</label>
-    </div>
+      resultEl.textContent='Pontszám: '+score+'/15';
 
-    <div class="q">
-      <h4>9. Melyik ital a legkörnyezettudatosabb, ha szomjas vagy útközben?</h4>
-      <label><input type="radio" name="q9" value="a"> Eldobható palackos víz</label><br>
-      <label><input type="radio" name="q9" value="b"> Kulacsba töltött csapvíz</label>
-    </div>
+      if(score===15){
+        showFeedback('⭐ Tökéletes!', 'Hibátlan teljesítmény! Ez igen! 🎉', 'wow');
+        confettiBurst(); try{ successS.currentTime=0; successS.play(); }catch{}
+      } else if(score>=10){
+        showFeedback('✅ Sikeres!', 'Ügyes voltál, megvan a min. 10 pont. Így tovább! 🙌', 'ok');
+        confettiBurst(); try{ successS.currentTime=0; successS.play(); }catch{}
+      } else {
+        showFeedback('😕 Most nem sikerült', 'Sebaj! Próbáld újra – menni fog!', 'sad');
+        try{ failS.currentTime=0; failS.play(); }catch{}
+      }
+    });
 
-    <div class="q">
-      <h4>10. Miért érdemes a standby üzemmódot is kikapcsolni?</h4>
-      <label><input type="radio" name="q10" value="a"> Mert így is fogyaszt egy kevés áramot</label><br>
-      <label><input type="radio" name="q10" value="b"> Mert a készülék tönkremegy tőle</label>
-    </div>
+    fbOk.addEventListener('click', ()=>overlay.classList.remove('show'));
+    fbRetry.addEventListener('click', ()=>{ overlay.classList.remove('show'); resetForm(); });
+    resetBtn.addEventListener('click', resetForm);
 
-    <div class="actions">
-      <button class="primary" type="submit">Értékelés</button>
-    </div>
+    function showFeedback(title, text, type){
+      fbTitle.textContent = title;
+      fbText.textContent  = text;
+      fbIcon.className = 'icon ' + (type==='ok' ? 'ok' : type==='sad' ? 'sad' : 'wow');
+      fbIcon.textContent = type==='sad' ? '🙁' : (type==='wow' ? '🤩' : '😊');
+      overlay.classList.add('show');
+    }
 
-    <p class="center" id="result"></p>
-  </form>
-</main>
-<script src="index.js"></script>
+    function resetForm(){
+      form.reset();
+      // párosítós visszaállítása
+      document.querySelectorAll('#match1 .match-target, #match2 .match-target').forEach(t=>{
+        t.classList.remove('filled','wrong');
+        const leftList = t.closest('.match-wrap').querySelector('.match-list.left');
+        [...t.querySelectorAll('.match-item')].forEach(it=>{
+          it.setAttribute('draggable','true');
+          it.style.cursor = 'grab';
+          leftList.appendChild(it);
+        });
+        t.style.borderStyle='dashed';
+      });
+      window.match1Done=false; window.match2Done=false;
+      resultEl.textContent='';
+    }
+
+    function confettiBurst(){
+      const cx = window.innerWidth/2, cy = window.innerHeight/2 + 40;
+      for (let i=0;i<24;i++){
+        const p = document.createElement('span');
+        p.className = 'particle';
+        p.style.left = cx+'px';
+        p.style.top  = cy+'px';
+        const angle = (Math.PI*2)*Math.random();
+        const dist  = 200+Math.random()*220;
+        p.style.setProperty('--tx', (Math.cos(angle)*dist) + 'px');
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(), 1000);
+      }
+    }
+  })();
+
+  // --- Párosítós helper (DOM-alapú kész állapot) ---
+  function setupMatching(rootId){
+    const root = document.getElementById(rootId);
+    if(!root) return { done:false };
+
+    const items   = root.querySelectorAll('.match-item');
+    const targets = root.querySelectorAll('.match-target');
+    let dragging  = null;
+
+    items.forEach(el=>{
+      el.addEventListener('dragstart', e=>{ dragging=el; el.classList.add('dragging'); });
+      el.addEventListener('dragend',   e=>{ el.classList.remove('dragging'); });
+    });
+
+    targets.forEach(t=>{
+      t.addEventListener('dragover', e=>e.preventDefault());
+      t.addEventListener('drop', e=>{
+        e.preventDefault();
+        if(!dragging) return;
+        if(t.classList.contains('filled')) return;
+        const need = t.dataset.accept;
+        const got  = dragging.dataset.key;
+        if(need===got){
+          t.classList.add('filled');
+          t.style.borderStyle='solid';
+          t.appendChild(dragging);
+          dragging.setAttribute('draggable','false');
+          dragging.style.cursor='default';
+        }else{
+          t.classList.add('wrong'); setTimeout(()=>t.classList.remove('wrong'),200);
+        }
+        dragging=null;
+      });
+    });
+
+    return {
+      get done(){
+        const filled = root.querySelectorAll('.match-target.filled').length;
+        const total  = root.querySelectorAll('.match-target').length;
+        return filled === total;
+      }
+    };
+  }
+
+  // Init + flags a párosítós blokkokhoz
+  (function(){
+    const m1 = setupMatching('match1');
+    const m2 = setupMatching('match2');
+    window.match1Done = false;
+    window.match2Done = false;
+    setInterval(()=>{
+      window.match1Done = m1.done;
+      window.match2Done = m2.done;
+    }, 250);
+  })();
+
+  // --- Drag & drop kukás játék ---
+  (function () {
+    const items = [...document.querySelectorAll('#items .item')];
+    const bins  = [...document.querySelectorAll('.dropbin')];
+    const msg   = document.getElementById('gameMsg');
+
+    const okS   = new Audio('music/success.wav'); okS.volume = .5;
+    const badS  = new Audio('music/fail.wav');    badS.volume = .5;
+
+    items.forEach(it => {
+      it.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', it.dataset.type || '');
+        it.classList.add('dragging');
+      });
+      it.addEventListener('dragend', () => it.classList.remove('dragging'));
+    });
+
+    bins.forEach(bin => {
+      bin.addEventListener('dragover', e => e.preventDefault());
+      bin.addEventListener('drop', e => {
+        e.preventDefault();
+        const t = e.dataTransfer.getData('text/plain');
+        const accept = bin.dataset.accept;
+        const dragging = document.querySelector('.item.dragging');
+        if (!dragging) return;
+
+        if (t === 'kakukk') {
+          say(false,'Ez komposzt/vegyes, nem szelektív kuka!'); wiggle(bin); return;
+        }
+        if (t === accept) {
+          say(true,'Ügyes! Jó helyre dobtad.');
+          bin.classList.add('correct');
+          dragging.setAttribute('draggable','false');
+          dragging.style.cursor = 'default';
+          dragging.style.opacity = .75;
+          dragging.classList.remove('dragging');
+          bin.appendChild(dragging);
+          dragging.style.margin = '6px 0';
+          try{ okS.currentTime=0; okS.play(); }catch{}
+        } else {
+          say(false,'Hopp, ez nem ide való.');
+          wiggle(bin);
+          try{ badS.currentTime=0; badS.play(); }catch{}
+        }
+      });
+    });
+
+    function say(ok, text){ if(!msg) return; msg.textContent=text; msg.style.color=ok?'#166534':'#b91c1c'; }
+    function wiggle(el){ el.classList.add('wrong'); setTimeout(()=>el.classList.remove('wrong'),250); }
+  })();
+
+  // --- Érintős fallback: koppintás az elemen → koppintás a célon/bin-en ---
+  (function(){
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints>0;
+    if(!isTouch) return;
+
+    // Párosítós (match1, match2)
+    ['match1','match2'].forEach(rootId=>{
+      const root = document.getElementById(rootId);
+      if(!root) return;
+      let selected = null;
+
+      root.querySelectorAll('.match-item').forEach(item=>{
+        item.addEventListener('click', ()=>{
+          if(item.getAttribute('draggable')==='false') return;
+          if(selected) selected.classList.remove('dragging');
+          selected = item;
+          item.classList.add('dragging');
+        });
+      });
+      root.querySelectorAll('.match-target').forEach(target=>{
+        target.addEventListener('click', ()=>{
+          if(!selected) return;
+          if(target.classList.contains('filled')) return;
+          const need = target.dataset.accept;
+          const got  = selected.dataset.key;
+          if(need===got){
+            target.classList.add('filled');
+            target.style.borderStyle='solid';
+            target.appendChild(selected);
+            selected.setAttribute('draggable','false');
+            selected.style.cursor='default';
+            selected.classList.remove('dragging');
+            selected = null;
+          }else{
+            target.classList.add('wrong'); setTimeout(()=>target.classList.remove('wrong'),200);
+          }
+        });
+      });
+    });
+
+    // Kukás játék (tap-to-drop)
+    const items = Array.from(document.querySelectorAll('#items .item'));
+    const bins  = Array.from(document.querySelectorAll('.dropbin'));
+    const msg   = document.getElementById('gameMsg');
+    let sel = null;
+
+    items.forEach(it=>{
+      it.addEventListener('click', ()=>{
+        if(it.getAttribute('draggable')==='false') return;
+        if(sel) sel.classList.remove('dragging');
+        sel = it; it.classList.add('dragging');
+        if(msg){ msg.textContent='Válassz kukát…'; msg.style.color='#0b1732'; }
+      });
+    });
+
+    bins.forEach(bin=>{
+      bin.addEventListener('click', ()=>{
+        if(!sel) return;
+        const t = sel.dataset.type || '';
+        const accept = bin.dataset.accept;
+        if (t === 'kakukk') { if(msg){ msg.textContent='Ez komposzt/vegyes, nem szelektív kuka!'; msg.style.color='#b91c1c'; } wiggle(bin); return; }
+        if (t === accept) {
+          if(msg){ msg.textContent='Ügyes! Jó helyre dobtad.'; msg.style.color='#166534'; }
+          bin.classList.add('correct');
+          sel.setAttribute('draggable','false'); sel.style.cursor='default'; sel.style.opacity=.75;
+          sel.classList.remove('dragging'); bin.appendChild(sel); sel.style.margin='6px 0'; sel=null;
+        } else {
+          if(msg){ msg.textContent='Hopp, ez nem ide való.'; msg.style.color='#b91c1c'; }
+          wiggle(bin);
+        }
+      });
+    });
+    function wiggle(el){ el.classList.add('wrong'); setTimeout(()=>el.classList.remove('wrong'),250); }
+  })();
+  </script>
 </body>
 </html>
